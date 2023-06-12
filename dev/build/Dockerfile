@@ -56,13 +56,13 @@ CMD ["node", "server"]
 
 
 FROM golang:1.16.2-alpine3.13 as builder
-WORKDIR /app
+WORKDIR /wiki
 COPY . ./
 # This is where one could build the application code as well.
 
 
 FROM alpine:latest as tailscale
-WORKDIR /app
+WORKDIR /wiki
 ENV TSFILE=tailscale_1.42.0_amd64.tgz
 RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
   tar xzf ${TSFILE} --strip-components=1
@@ -80,10 +80,10 @@ COPY sshd_config /etc/ssh/
 EXPOSE 80 2222
 
 # Copy binary to production image
-COPY --from=builder /app/start.sh /app/start.sh
-COPY --from=tailscale /app/tailscaled /app/tailscaled
-COPY --from=tailscale /app/tailscale /app/tailscale
+COPY --from=builder /wiki/start.sh /wiki/start.sh
+COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
+COPY --from=tailscale /wiki/tailscale /wiki/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 
 # Run on container startup.
-CMD ["/app/start.sh"]
+CMD ["/wiki/start.sh"]
