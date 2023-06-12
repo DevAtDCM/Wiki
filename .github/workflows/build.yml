@@ -123,7 +123,7 @@ jobs:
     name: Publish Beta Images
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build, arm, windows]
+    needs: [build, windows]
     permissions:
       packages: write
 
