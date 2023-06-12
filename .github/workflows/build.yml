@@ -88,7 +88,6 @@ jobs:
   windows:
     name: Windows Build
     runs-on: windows-latest
-    needs: [cypress]
 
     steps:
     - name: Setup Node.js environment
