@@ -72,7 +72,7 @@ FROM alpine:latest
 RUN apk update && apk add ca-certificates bash sudo && rm -rf /var/cache/apk/*
 
 # Copy binary to production image
-COPY --from=builder ./start.sh /wiki/start.sh
+COPY --from=builder /wiki/start.sh /wiki/start.sh
 COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
