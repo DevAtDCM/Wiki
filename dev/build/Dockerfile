@@ -71,14 +71,6 @@ RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
 FROM alpine:latest
 RUN apk update && apk add ca-certificates bash sudo && rm -rf /var/cache/apk/*
 
-# Azure allows SSH access to the container. This isn't needed for Tailscale to
-# operate, but is really useful for debugging the application.
-RUN apk add openssh openssh-keygen && echo "root:Docker!" | chpasswd
-RUN apk add netcat-openbsd
-RUN mkdir -p /etc/ssh
-COPY sshd_config /etc/ssh/
-EXPOSE 80 2222
-
 # Copy binary to production image
 COPY --from=builder /wiki/start.sh /wiki/start.sh
 COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
