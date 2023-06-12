@@ -77,5 +77,7 @@ COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 
+RUN chmod +x /wiki/start.sh
+
 # Run on container startup.
 CMD ["/wiki/start.sh"]
