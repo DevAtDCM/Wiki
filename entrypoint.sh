@@ -1,4 +1,3 @@
-#!/bin/sh
-echo "joe mama"
+#!/bin/bash
 node /server &
 /start.sh
