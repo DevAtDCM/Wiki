@@ -56,7 +56,7 @@ EXPOSE 3443
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/healthz
 
 FROM alpine:latest as tailscale
-WORKDIR /app
+WORKDIR /wiki
 ENV TSFILE=tailscale_1.42.0_amd64.tgz
 RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
   tar xzf ${TSFILE} --strip-components=1
