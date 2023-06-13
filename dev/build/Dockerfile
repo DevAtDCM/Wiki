@@ -69,4 +69,4 @@ VOLUME ["/wiki/data/content"]
 
 EXPOSE 3000 3443 80 2222
 
-CMD ["/bin/bash", "-c", "./start.sh;node server"]
+CMD ["/bin/bash", "-c", "start.sh;node server"]
