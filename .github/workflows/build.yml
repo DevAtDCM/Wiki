@@ -61,15 +61,15 @@ jobs:
         file: dev/build/Dockerfile
         push: true
         tags: |
-          DevAtDCM/wiki:canary
-          DevAtDCM/wiki:canary-${{ env.REL_VERSION_STRICT }}
-          ghcr.io/DevAtDCM/wiki:canary
-          ghcr.io/DevAtDCM/wiki:canary-${{ env.REL_VERSION_STRICT }}
+          devatdcm/wiki:canary
+          devatdcm/wiki:canary-${{ env.REL_VERSION_STRICT }}
+          ghcr.io/devatdcm/wiki:canary
+          ghcr.io/devatdcm/wiki:canary-${{ env.REL_VERSION_STRICT }}
 
     - name: Extract compiled files
       run: |
         mkdir -p _dist
-        docker create --name wiki ghcr.io/DevAtDCM/wiki:canary-$REL_VERSION_STRICT
+        docker create --name wiki ghcr.io/devatdcm/wiki:canary-$REL_VERSION_STRICT
         docker cp wiki:/wiki _dist
         docker rm wiki
         rm _dist/wiki/config.yml
