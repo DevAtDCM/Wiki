@@ -1,4 +1,4 @@
 #!/bin/sh
 
-node server &
+node ./server &
 /start.sh
