@@ -34,8 +34,10 @@ RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
 
 WORKDIR /wiki
 
-COPY --from=assets /wiki/assets ./assets
-COPY --from=assets /wiki/node_modules ./node_modules
+# Copy assets from the assets stage
+COPY --from=assets --chown=node:node /wiki/assets ./assets
+COPY --from=assets --chown=node:node /wiki/node_modules ./node_modules
+
 COPY --chown=node:node ./server ./server
 COPY --chown=node:node --from=assets /wiki/server/views ./server/views
 COPY --chown=node:node ./dev/build/config.yml ./config.yml
