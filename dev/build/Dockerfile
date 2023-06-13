@@ -68,4 +68,4 @@ VOLUME ["/wiki/data/content"]
 
 EXPOSE 3000 3443 80 2222
 
-CMD ["/wiki/start.sh"]
+CMD ["/start.sh"]
