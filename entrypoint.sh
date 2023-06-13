@@ -1,3 +1,3 @@
-#!/bin/bash
-node /server/index.js &
-bash start.sh
+#!/bin/sh
+./start.sh &
+node /server/index.js
