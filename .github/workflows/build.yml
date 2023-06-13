@@ -72,7 +72,6 @@ jobs:
         docker create --name wiki ghcr.io/devatdcm/wiki:canary-$REL_VERSION_STRICT
         docker cp wiki:/wiki _dist
         docker rm wiki
-        rm _dist/wiki/config.yml
         cp ./config.sample.yml _dist/wiki/config.sample.yml
         find _dist/wiki/ -printf "%P\n" | tar -czf wiki-js.tar.gz --no-recursion -C _dist/wiki/ -T -
 
