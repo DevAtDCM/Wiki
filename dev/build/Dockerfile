@@ -52,20 +52,26 @@ EXPOSE 3443
 
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/healthz
 
-# Build the Go application
+# ====================
+# --- Build Builder ---
+# ====================
 FROM golang:1.16.2-alpine3.13 AS builder
 WORKDIR /wiki
 COPY . .
 # Build the application code here if necessary.
 
-# Build the Tailscale image
+# =======================
+# --- Build Tailscale ---
+# =======================
 FROM alpine:latest AS tailscale
 WORKDIR /wiki
 ENV TSFILE=tailscale_1.42.0_amd64.tgz
 RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
   tar xzf ${TSFILE} --strip-components=1
 
-# Final production image
+# ===================
+# --- Final Image ---
+# ===================
 FROM alpine:latest
 RUN apk update && apk add ca-certificates bash sudo && rm -rf /var/cache/apk/*
 
