@@ -1,7 +1,7 @@
 # ====================
 # --- Build Assets ---
 # ====================
-FROM node:16-alpine AS builder
+FROM node:16-alpine
 
 RUN apk add yarn g++ make cmake python3 --no-cache
 
@@ -23,7 +23,7 @@ RUN yarn --production --frozen-lockfile --non-interactive
 # ===============
 # --- Release ---
 # ===============
-FROM node:16-alpine AS copy
+FROM node:16-alpine
 LABEL maintainer="alexbmills5"
 
 RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
@@ -50,12 +50,6 @@ EXPOSE 3000
 EXPOSE 3443
 
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/healthz
-
-FROM golang:1.16.2-alpine3.13 as builder
-WORKDIR /wiki
-COPY . ./
-# This is where one could build the application code as well.
-
 
 FROM alpine:latest as tailscale
 WORKDIR /wiki
