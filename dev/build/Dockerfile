@@ -51,6 +51,29 @@ EXPOSE 3443
 
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/healthz
 
+FROM golang:1.16.2-alpine3.13 as builder
+WORKDIR /wiki
+COPY . ./
+# This is where one could build the application code as well.
+
+
+FROM alpine:latest as tailscale
+WORKDIR /wiki
+ENV TSFILE=tailscale_1.42.0_amd64.tgz
+RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
+  tar xzf ${TSFILE} --strip-components=1
+
+
+FROM alpine:latest
+RUN apk update && apk add ca-certificates bash sudo && rm -rf /var/cache/apk/*
+
+# Copy binary to production image
+COPY --from=builder /wiki/start.sh /wiki/start.sh
+COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
+COPY --from=tailscale /wiki/tailscale /wiki/tailscale
+RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
+RUN chmod +x /wiki/start.sh
+
 # Run node server
 ENTRYPOINT ["node", "server"]
 
