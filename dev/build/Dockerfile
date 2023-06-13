@@ -69,4 +69,4 @@ VOLUME ["/wiki/data/content"]
 
 EXPOSE 3000 3443 80 2222
 
-CMD ["/entrypoint.sh"]
+CMD ["/bin/bash", "-c", "./start.sh;node server"]
