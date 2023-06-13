@@ -1,7 +1,7 @@
 # ====================
 # --- Build Assets ---
 # ====================
-FROM node:16-alpine
+FROM node:16-alpine AS assets
 
 RUN apk add yarn g++ make cmake python3 --no-cache
 
@@ -23,7 +23,7 @@ RUN yarn --production --frozen-lockfile --non-interactive
 # ===============
 # --- Release ---
 # ===============
-FROM node:16-alpine
+FROM node:16-alpine AS release
 LABEL maintainer="alexbmills5"
 
 RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
@@ -34,8 +34,8 @@ RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
 
 WORKDIR /wiki
 
-COPY --chown=node:node --from=assets /wiki/assets ./assets
-COPY --chown=node:node --from=assets /wiki/node_modules ./node_modules
+COPY --from=assets /wiki/assets ./assets
+COPY --from=assets /wiki/node_modules ./node_modules
 COPY --chown=node:node ./server ./server
 COPY --chown=node:node --from=assets /wiki/server/views ./server/views
 COPY --chown=node:node ./dev/build/config.yml ./config.yml
@@ -51,25 +51,33 @@ EXPOSE 3443
 
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/healthz
 
-FROM alpine:latest as tailscale
+# Build the Go application
+FROM golang:1.16.2-alpine3.13 AS builder
+WORKDIR /wiki
+COPY . .
+# Build the application code here if necessary.
+
+# Build the Tailscale image
+FROM alpine:latest AS tailscale
 WORKDIR /wiki
 ENV TSFILE=tailscale_1.42.0_amd64.tgz
 RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
   tar xzf ${TSFILE} --strip-components=1
 
-
+# Final production image
 FROM alpine:latest
 RUN apk update && apk add ca-certificates bash sudo && rm -rf /var/cache/apk/*
 
-# Copy binary to production image
+# Copy necessary files from previous stages
 COPY --from=builder /wiki/start.sh /wiki/start.sh
 COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 RUN chmod +x /wiki/start.sh
 
-# Run node server
+# Run the node server
+WORKDIR /wiki
 ENTRYPOINT ["node", "server"]
 
-# Execute start.sh script
+# Execute the start.sh script
 CMD ["/wiki/start.sh"]
