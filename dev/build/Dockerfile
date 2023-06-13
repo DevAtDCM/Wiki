@@ -60,7 +60,6 @@ COPY --chown=node:node ./package.json ./package.json
 COPY --chown=node:node ./LICENSE ./LICENSE
 COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
-COPY sshd_config /etc/ssh/
 COPY /start.sh /start.sh
 
 USER node
