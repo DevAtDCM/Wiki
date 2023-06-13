@@ -1,5 +1,4 @@
 #!/bin/sh
-node server
 
 /usr/bin/ssh-keygen -A
 mkdir -p /var/run/sshd
