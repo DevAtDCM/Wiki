@@ -61,8 +61,8 @@ jobs:
         file: dev/build/Dockerfile
         push: true
         tags: |
-          devatdcm/wiki:canary
-          devatdcm/wiki:canary-${{ env.REL_VERSION_STRICT }}
+          alexbmills5/wiki:canary
+          alexbmills5/wiki:canary-${{ env.REL_VERSION_STRICT }}
           ghcr.io/devatdcm/wiki:canary
           ghcr.io/devatdcm/wiki:canary-${{ env.REL_VERSION_STRICT }}
 
