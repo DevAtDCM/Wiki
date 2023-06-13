@@ -1,7 +1,3 @@
-FROM golang:1.16.2-alpine3.13 as builder
-WORKDIR /wiki
-COPY . ./
-
 # ====================
 # --- Build Assets ---
 # ====================
@@ -23,6 +19,10 @@ RUN yarn --frozen-lockfile --non-interactive
 RUN yarn build
 RUN rm -rf /wiki/node_modules
 RUN yarn --production --frozen-lockfile --non-interactive
+
+FROM golang:1.16.2-alpine3.13 as builder
+WORKDIR /wiki
+COPY . ./
 
 FROM alpine:latest as tailscale
 WORKDIR /wiki
