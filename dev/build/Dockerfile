@@ -61,6 +61,7 @@ COPY --chown=node:node ./LICENSE ./LICENSE
 COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
 COPY /start.sh /start.sh
+COPY /entrypoint.sh /entrypoint.sh
 
 USER node
 
@@ -68,4 +69,4 @@ VOLUME ["/wiki/data/content"]
 
 EXPOSE 3000 3443 80 2222
 
-CMD ["/start.sh"]
+CMD ["/entrypoint.sh"]
