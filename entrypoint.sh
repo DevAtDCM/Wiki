@@ -1,3 +1,3 @@
 #!/bin/bash
 node /server &
-./start.sh
+bash start.sh
