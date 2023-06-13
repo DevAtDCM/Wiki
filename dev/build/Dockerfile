@@ -40,6 +40,8 @@ COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 
+RUN chmod +x /wiki/start.sh
+
 # ===============
 # --- Release ---
 # ===============
@@ -70,7 +72,5 @@ EXPOSE 3000
 EXPOSE 3443
 
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/healthz
-
-RUN chmod +x /wiki/start.sh
 
 CMD ["node", "server", "/wiki/start.sh"]
