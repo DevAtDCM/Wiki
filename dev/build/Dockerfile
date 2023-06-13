@@ -1,7 +1,7 @@
 # ====================
 # --- Build Assets ---
 # ====================
-FROM node:16-alpine AS build
+FROM node:16-alpine AS builder
 
 RUN apk add yarn g++ make cmake python3 --no-cache
 
