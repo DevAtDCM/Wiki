@@ -1,7 +1,7 @@
 # ====================
 # --- Build Assets ---
 # ====================
-FROM node:16-alpine AS assets
+FROM node:16-alpine AS build
 
 RUN apk add yarn g++ make cmake python3 --no-cache
 
@@ -23,7 +23,7 @@ RUN yarn --production --frozen-lockfile --non-interactive
 # ===============
 # --- Release ---
 # ===============
-FROM node:16-alpine
+FROM node:16-alpine AS copy
 LABEL maintainer="alexbmills5"
 
 RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
