@@ -75,4 +75,4 @@ VOLUME ["/wiki/data/content"]
 EXPOSE 3000 
 EXPOSE 3443
 
-CMD ["/wiki/entrypoint.sh"]
+CMD ["bash", "/wiki/entrypoint.sh"]
