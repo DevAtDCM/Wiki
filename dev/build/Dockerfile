@@ -52,10 +52,12 @@ RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
     mkdir -p /etc/ssh && \
     mkdir -p /wiki/data/content && \
     mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale && \
-    chown -R node:node /wiki /logs
+    chown -R root:root /wiki /logs && \
+	chmod -R +rw /wiki
 
 WORKDIR /wiki
 
+RUN apk add sudo
 COPY --chown=node:node --from=cached-assets /wiki/assets ./assets
 COPY --chown=node:node --from=cached-assets /wiki/node_modules ./node_modules
 COPY --chown=node:node ./server ./server
