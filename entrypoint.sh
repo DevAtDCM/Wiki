@@ -1,3 +1,5 @@
 #!/bin/sh
-sh /wiki/start.sh &
-node /server/index.js
+
+ls ./ &&
+bash start.sh &&
+node server

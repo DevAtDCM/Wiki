@@ -17,8 +17,13 @@ COPY ./.eslintrc.yml ./.eslintrc.yml
 RUN yarn cache clean
 RUN yarn --frozen-lockfile --non-interactive
 RUN yarn build
-RUN rm -rf /wiki/node_modules
-RUN yarn --production --frozen-lockfile --non-interactive
+
+# ============================
+# --- Cache Yarn Build Step ---
+# ============================
+FROM assets AS cached-assets
+
+# Empty command to preserve the intermediate layer with the yarn build output
 
 # ====================
 # --- Build Tailscale Binaries ---
@@ -51,22 +56,23 @@ RUN apk add bash curl git openssh gnupg sqlite --no-cache && \
 
 WORKDIR /wiki
 
-COPY --chown=node:node --from=assets /wiki/assets ./assets
-COPY --chown=node:node --from=assets /wiki/node_modules ./node_modules
+COPY --chown=node:node --from=cached-assets /wiki/assets ./assets
+COPY --chown=node:node --from=cached-assets /wiki/node_modules ./node_modules
 COPY --chown=node:node ./server ./server
-COPY --chown=node:node --from=assets /wiki/server/views ./server/views
+COPY --chown=node:node --from=cached-assets /wiki/server/views ./server/views
 COPY --chown=node:node ./dev/build/config.yml ./config.yml
 COPY --chown=node:node ./package.json ./package.json
 COPY --chown=node:node ./LICENSE ./LICENSE
 COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
 COPY --from=tailscale /wiki/tailscale /wiki/tailscale
-COPY /start.sh /start.sh
-COPY /entrypoint.sh /entrypoint.sh
+COPY --chown=node:node entrypoint.sh /wiki/entrypoint.sh
+COPY --chown=node:node start.sh /wiki/start.sh
 
 USER node
 
 VOLUME ["/wiki/data/content"]
 
-EXPOSE 3000 3443 80 2222
+EXPOSE 3000 
+EXPOSE 3443
 
-CMD ["/bin/bash", "-c", "start.sh;node server"]
+CMD ["/wiki/entrypoint.sh"]
