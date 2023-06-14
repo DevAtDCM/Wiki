@@ -63,12 +63,12 @@ COPY --chown=node:node --from=cached-assets /wiki/server/views ./server/views
 COPY --chown=node:node ./dev/build/config.yml ./config.yml
 COPY --chown=node:node ./package.json ./package.json
 COPY --chown=node:node ./LICENSE ./LICENSE
-COPY --from=tailscale /wiki/tailscaled /wiki/tailscaled
-COPY --from=tailscale /wiki/tailscale /wiki/tailscale
+COPY --chown=node:node --from=tailscale /wiki/tailscaled /wiki/tailscaled
+COPY --chown=node:node --from=tailscale /wiki/tailscale /wiki/tailscale
 COPY --chown=node:node entrypoint.sh /wiki/entrypoint.sh
 COPY --chown=node:node start.sh /wiki/start.sh
 
-USER node
+USER root
 
 VOLUME ["/wiki/data/content"]
 
