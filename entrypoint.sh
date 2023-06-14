@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-bash start.sh &&
+sh ./start.sh &&
 node server
